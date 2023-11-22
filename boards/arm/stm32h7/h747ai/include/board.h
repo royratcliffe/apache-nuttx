@@ -39,21 +39,15 @@
 
 /* Clocking *****************************************************************/
 
-/* The Nucleo-144  board provides the following clock sources:
- *
- *   MCO: 8 MHz from MCO output of ST-LINK is used as input clock (default)
- *   X2:  32.768 KHz crystal for LSE
- *   X3:  HSE crystal oscillator (not provided)
- *
- * So we have these clock source available within the STM32
+/* Clock source available within the STM32
  *
  *   HSI: 16 MHz RC factory-trimmed
  *   LSI: 32 KHz RC
- *   HSE: 8 MHz from MCO output of ST-LINK
+ *   HSE: 48 MHz crystal oscillator
  *   LSE: 32.768 kHz
  */
 
-#define STM32_BOARD_XTAL        8000000ul /* ST-LINK MCO */
+#define STM32_BOARD_XTAL        48000000ul
 
 #define STM32_HSI_FREQUENCY     16000000ul
 #define STM32_LSI_FREQUENCY     32000
@@ -62,7 +56,7 @@
 
 /* Main PLL Configuration.
  *
- * PLL source is HSE = 8,000,000
+ * PLL source is HSE = 48,000,000
  *
  * When STM32_HSE_FREQUENCY / PLLM <= 2MHz VCOL must be selected.
  * VCOH otherwise.
@@ -85,13 +79,12 @@
  */
 
 #define STM32_BOARD_USEHSE
-#define STM32_HSEBYP_ENABLE
 
 #define STM32_PLLCFG_PLLSRC      RCC_PLLCKSELR_PLLSRC_HSE
 
 /* PLL1, wide 4 - 8 MHz input, enable DIVP, DIVQ, DIVR
  *
- *   PLL1_VCO = (8,000,000 / 2) * 200 = 800 MHz
+ *   PLL1_VCO = (48,000,000 / 12) * 200 = 800 MHz
  *
  *   PLL1P = PLL1_VCO/2  = 800 MHz / 2   = 400 MHz
  *   PLL1Q = PLL1_VCO/4  = 800 MHz / 4   = 200 MHz
@@ -103,13 +96,13 @@
                                   RCC_PLLCFGR_DIVP1EN | \
                                   RCC_PLLCFGR_DIVQ1EN | \
                                   RCC_PLLCFGR_DIVR1EN)
-#define STM32_PLLCFG_PLL1M       RCC_PLLCKSELR_DIVM1(2)
+#define STM32_PLLCFG_PLL1M       RCC_PLLCKSELR_DIVM1(12)
 #define STM32_PLLCFG_PLL1N       RCC_PLL1DIVR_N1(200)
 #define STM32_PLLCFG_PLL1P       RCC_PLL1DIVR_P1(2)
 #define STM32_PLLCFG_PLL1Q       RCC_PLL1DIVR_Q1(4)
 #define STM32_PLLCFG_PLL1R       RCC_PLL1DIVR_R1(8)
 
-#define STM32_VCO1_FREQUENCY     ((STM32_HSE_FREQUENCY / 2) * 200)
+#define STM32_VCO1_FREQUENCY     ((STM32_HSE_FREQUENCY / 12) * 200)
 #define STM32_PLL1P_FREQUENCY    (STM32_VCO1_FREQUENCY / 2)
 #define STM32_PLL1Q_FREQUENCY    (STM32_VCO1_FREQUENCY / 4)
 #define STM32_PLL1R_FREQUENCY    (STM32_VCO1_FREQUENCY / 8)
@@ -119,14 +112,14 @@
 #define STM32_PLLCFG_PLL2CFG (RCC_PLLCFGR_PLL2VCOSEL_WIDE | \
                               RCC_PLLCFGR_PLL2RGE_4_8_MHZ | \
                               RCC_PLLCFGR_DIVP2EN)
-#define STM32_PLLCFG_PLL2M       RCC_PLLCKSELR_DIVM2(2)
+#define STM32_PLLCFG_PLL2M       RCC_PLLCKSELR_DIVM2(12)
 #define STM32_PLLCFG_PLL2N       RCC_PLL2DIVR_N2(200)
 #define STM32_PLLCFG_PLL2P       RCC_PLL2DIVR_P2(40)
 #define STM32_PLLCFG_PLL2Q       0
 #define STM32_PLLCFG_PLL2R       0
 
-#define STM32_VCO2_FREQUENCY     ((STM32_HSE_FREQUENCY / 2) * 200)
-#define STM32_PLL2P_FREQUENCY    (STM32_VCO2_FREQUENCY / 2)
+#define STM32_VCO2_FREQUENCY     ((STM32_HSE_FREQUENCY / 12) * 200)
+#define STM32_PLL2P_FREQUENCY    (STM32_VCO2_FREQUENCY / 40)
 #define STM32_PLL2Q_FREQUENCY
 #define STM32_PLL2R_FREQUENCY
 
@@ -167,22 +160,22 @@
 #define STM32_ACLK_FREQUENCY    (STM32_SYSCLK_FREQUENCY / 2)    /* ACLK in D1, HCLK3 in D1 */
 #define STM32_HCLK_FREQUENCY    (STM32_SYSCLK_FREQUENCY / 2)    /* HCLK in D2, HCLK4 in D3 */
 
-/* APB1 clock (PCLK1) is HCLK/4 (54 MHz) */
+/* APB1 clock (PCLK1) is HCLK/4 (50 MHz) */
 
 #define STM32_RCC_D2CFGR_D2PPRE1  RCC_D2CFGR_D2PPRE1_HCLKd4       /* PCLK1 = HCLK / 4 */
 #define STM32_PCLK1_FREQUENCY     (STM32_HCLK_FREQUENCY/4)
 
-/* APB2 clock (PCLK2) is HCLK/4 (54 MHz) */
+/* APB2 clock (PCLK2) is HCLK/4 (50 MHz) */
 
 #define STM32_RCC_D2CFGR_D2PPRE2  RCC_D2CFGR_D2PPRE2_HCLKd4       /* PCLK2 = HCLK / 4 */
 #define STM32_PCLK2_FREQUENCY     (STM32_HCLK_FREQUENCY/4)
 
-/* APB3 clock (PCLK3) is HCLK/4 (54 MHz) */
+/* APB3 clock (PCLK3) is HCLK/4 (50 MHz) */
 
 #define STM32_RCC_D1CFGR_D1PPRE   RCC_D1CFGR_D1PPRE_HCLKd4        /* PCLK3 = HCLK / 4 */
 #define STM32_PCLK3_FREQUENCY     (STM32_HCLK_FREQUENCY/4)
 
-/* APB4 clock (PCLK4) is HCLK/4 (54 MHz) */
+/* APB4 clock (PCLK4) is HCLK/4 (50 MHz) */
 
 #define STM32_RCC_D3CFGR_D3PPRE   RCC_D3CFGR_D3PPRE_HCLKd4       /* PCLK4 = HCLK / 4 */
 #define STM32_PCLK4_FREQUENCY     (STM32_HCLK_FREQUENCY/4)
@@ -335,18 +328,26 @@
 
 /* Alternate function pin selections ****************************************/
 
-/* USART1 (Arduino Serial Shield) */
+/* UART5 GPIO Configuration
+ *
+ * PB5 ------> UART5_RX
+ * PB6 ------> UART5_TX
+ */
 
-#define GPIO_USART1_RX    (GPIO_USART1_RX_3) /* PB7 */
-#define GPIO_USART1_TX    (GPIO_USART1_TX_3) /* PB6 */
+#define GPIO_UART5_RX GPIO_UART5_RX_2
+#define GPIO_UART5_TX GPIO_UART5_TX_2
 
-/* USART3 (Nucleo Virtual Console) */
+/* UART8 GPIO Configuration
+ *
+ * PE0 ------> UART8_RX
+ * PE1 ------> UART8_TX
+ */
 
-#define GPIO_USART3_RX     GPIO_USART3_RX_3  /* PD9 */
-#define GPIO_USART3_TX     GPIO_USART3_TX_3  /* PD8 */
+#define GPIO_UART8_RX GPIO_UART8_RX_1
+#define GPIO_UART8_TX GPIO_UART8_TX_1
 
-#define DMAMAP_USART3_RX DMAMAP_DMA12_USART3RX_0
-#define DMAMAP_USART3_TX DMAMAP_DMA12_USART3TX_1
+// #define DMAMAP_USART8_RX DMAMAP_DMA12_USART8RX_0
+// #define DMAMAP_USART8_TX DMAMAP_DMA12_USART8TX_1
 
 /****************************************************************************
  * Public Data
