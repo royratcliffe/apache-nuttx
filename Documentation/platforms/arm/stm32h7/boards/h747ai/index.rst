@@ -6,16 +6,25 @@ Assumes the following:
 
     * 48 MHz crystal oscillator for HSE
 
+Compiling
+---------
+
 Build using:
 
     cmake -B build/h747ai_cm7_rptun -DBOARD_CONFIG=h747ai:nsh_cm7_rptun -GNinja
     cmake -B build/h747ai_cm4_rptun -DBOARD_CONFIG=h747ai:nsh_cm4_rptun -GNinja
+
+Testing
+-------
 
 Connect indirectly to the CM4 via the CM7 using:
 
     nsh-cm7> cu -l /dev/ttyproxy
     NuttShell (NSH) NuttX-3.6.1
     nsh-cm4>
+
+Debugging
+---------
 
 Debug using:
 
@@ -111,3 +120,5 @@ Debug using:
 				"-s"
 			]
 		}
+
+Note that the M7 is core 0 (`-m 0`) and the M4 is core 3 (`-m 3`).
