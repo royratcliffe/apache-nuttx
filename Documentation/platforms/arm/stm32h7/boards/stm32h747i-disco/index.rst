@@ -110,3 +110,103 @@ nsh:
 
 This configuration provides a basic NuttShell configuration (NSH)
 for the board.  The default console is the VCOM on USART1.
+
+Debugging
+---------
+
+Debug using:
+
+		{
+			"name": "Debug DISCO CM7 - ST-Link",
+			"cwd": "${workspaceFolder}",
+			"type": "cortex-debug",
+			"executable": "${workspaceFolder}/build/stm32h747i-disco_cm7_rptun/nuttx",
+			"loadFiles": [
+				"${workspaceFolder}/build/stm32h747i-disco_cm7_rptun/nuttx",
+				"${workspaceFolder}/build/stm32h747i-disco_cm4_rptun/nuttx"
+			],
+			"request": "launch",
+			"servertype": "stlink",
+			"gdbPath": "/usr/bin/gdb-multiarch",
+			"device": "STM32H747XI",
+			"interface": "swd",
+			"runToEntryPoint": "main",
+			"svdFile": "${workspaceFolder}/STM32H747_CM7.svd",
+			"v1": false,
+			"showDevDebugOutput": "both",
+			"serverArgs": [
+				"-l",
+				"1",
+				"-m",
+				"0",
+				"-k",
+				"-t",
+				"-s"
+			]
+		},
+		{
+			"name": "Debug DISCO CM7+CM4 - ST-Link",
+			"cwd": "${workspaceFolder}",
+			"type": "cortex-debug",
+			"executable": "${workspaceFolder}/build/stm32h747i-disco_cm7_rptun/nuttx",
+			"loadFiles": [
+				"${workspaceFolder}/build/stm32h747i-disco_cm7_rptun/nuttx",
+				"${workspaceFolder}/build/stm32h747i-disco_cm4_rptun/nuttx"
+			],
+			"request": "launch",
+			"servertype": "stlink",
+			"gdbPath": "/usr/bin/gdb-multiarch",
+			"device": "STM32H747XI",
+			"interface": "swd",
+			"serialNumber": "",
+			"svdFile": "${workspaceFolder}/STM32H747_CM7.svd",
+			"v1": false,
+			"showDevDebugOutput": "both",
+			"serverArgs": [
+				"-l",
+				"1",
+				"-m",
+				"0",
+				"-k",
+				"-t",
+				"-s"
+			],
+			"chainedConfigurations": {
+				"enabled": true,
+				"waitOnEvent": "postInit",
+				"detached": true,
+				"delayMs": 5000,
+				"lifecycleManagedByParent": true,
+				"launches": [
+					{
+						"name": "Attach DISCO CM4 - ST-Link",
+						"folder": "${workspaceFolder}"
+					}
+				]
+			}
+		},
+		{
+			"name": "Attach DISCO CM4 - ST-Link",
+			"cwd": "${workspaceFolder}",
+			"type": "cortex-debug",
+			"executable": "${workspaceFolder}/build/stm32h747i-disco_cm4_rptun/nuttx",
+			"request": "attach",
+			"servertype": "stlink",
+			"gdbPath": "/usr/bin/gdb-multiarch",
+			"device": "STM32H747XI",
+			"interface": "swd",
+			"serialNumber": "",
+			"svdFile": "${workspaceFolder}/STM32H747_CM4.svd",
+			"v1": false,
+			"showDevDebugOutput": "both",
+			"serverArgs": [
+				"-l",
+				"1",
+				"-m",
+				"3",
+				"-t",
+				"-s"
+			]
+		}
+
+Note that the M7 is core 0 (`-m 0`) and the M4 is core 3 (`-m 3`).

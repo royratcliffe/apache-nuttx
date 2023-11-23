@@ -60,7 +60,25 @@ endif()
 
 target_sources(board PRIVATE ${SRCS})
 
-set_property(GLOBAL PROPERTY LD_SCRIPT "${NUTTX_BOARD_DIR}/scripts/flash.ld")
+if(CONFIG_ARCH_CHIP_STM32H7_CORTEXM7)
+  if(CONFIG_STM32_APP_FORMAT_MCUBOOT)
+    if(CONFIG_MCUBOOT_BOOTLOADER)
+      set_property(
+        GLOBAL PROPERTY LD_SCRIPT
+                        "${NUTTX_BOARD_DIR}/scripts/flash-mcuboot-loader.ld")
+    else()
+      set_property(
+        GLOBAL PROPERTY LD_SCRIPT
+                        "${NUTTX_BOARD_DIR}/scripts/flash-mcuboot-app.ld")
+    endif()
+  else()
+    set_property(GLOBAL PROPERTY LD_SCRIPT
+                                 "${NUTTX_BOARD_DIR}/scripts/flash.ld")
+  endif()
+else()
+  set_property(GLOBAL PROPERTY LD_SCRIPT
+                               "${NUTTX_BOARD_DIR}/scripts/flash_m4.ld")
+endif()
 
 if(NOT CONFIG_BUILD_FLAT)
   add_subdirectory(${NUTTX_BOARD_DIR}/kernel)

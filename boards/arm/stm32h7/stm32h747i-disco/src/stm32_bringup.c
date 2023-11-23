@@ -32,6 +32,13 @@
 
 #include <nuttx/fs/fs.h>
 
+#ifdef CONFIG_RPTUN
+#  include "stm32_rptun.h"
+#endif
+#ifdef CONFIG_RPMSG_UART
+#  include <nuttx/serial/uart_rpmsg.h>
+#endif
+
 #ifdef CONFIG_INPUT_BUTTONS
 #  include <nuttx/input/buttons.h>
 #endif
@@ -106,6 +113,27 @@ static void stm32_i2ctool(void)
 /****************************************************************************
  * Public Functions
  ****************************************************************************/
+
+#ifdef CONFIG_RPMSG_UART
+/****************************************************************************
+ * Name: rpmsg_serialinit
+ ****************************************************************************/
+
+void rpmsg_serialinit(void)
+{
+#ifdef CONFIG_ARCH_CHIP_STM32H7_CORTEXM7
+  uart_rpmsg_init("cm7", "proxy", 4096, false);
+#endif
+
+#ifdef CONFIG_ARCH_CHIP_STM32H7_CORTEXM4
+#  ifdef CONFIG_RPMSG_UART_CONSOLE
+  uart_rpmsg_init("cm4", "proxy", 4096, true);
+#  else
+  uart_rpmsg_init("cm4", "proxy", 4096, false);
+#  endif
+#endif
+}
+#endif
 
 /****************************************************************************
  * Name: stm32_bringup
