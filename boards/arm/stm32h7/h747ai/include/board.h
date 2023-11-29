@@ -274,13 +274,8 @@
 
 /* LED definitions **********************************************************/
 
-/* The Nucleo-144 board has numerous LEDs but only three, LD1 a Green LED,
- * LD2 a Blue LED and LD3 a Red LED, that can be controlled by software.
- * The following definitions assume the default Solder Bridges are installed.
- *
- * If CONFIG_ARCH_LEDS is not defined, then the user can control the LEDs in
- * any way.
- * The following definitions are used to access individual LEDs.
+/* If CONFIG_ARCH_LEDS is not defined, then the user can control the LEDs in
+ * any way. The following definitions are used to access individual LEDs.
  */
 
 /* LED index values for use with board_userled() */
@@ -288,17 +283,26 @@
 #define BOARD_LED1        0
 #define BOARD_LED2        1
 #define BOARD_LED3        2
-#define BOARD_NLEDS       3
+#define BOARD_LED4        3
+#define BOARD_LED5        4
+#define BOARD_LED6        5
+#define BOARD_NLEDS       6
 
-#define BOARD_LED_GREEN   BOARD_LED1
-#define BOARD_LED_BLUE    BOARD_LED2
-#define BOARD_LED_RED     BOARD_LED3
+#define BOARD_LED1_GREEN   BOARD_LED1
+#define BOARD_LED1_BLUE    BOARD_LED2
+#define BOARD_LED1_RED     BOARD_LED3
+#define BOARD_LED2_GREEN   BOARD_LED4
+#define BOARD_LED2_BLUE    BOARD_LED5
+#define BOARD_LED2_RED     BOARD_LED6
 
 /* LED bits for use with board_userled_all() */
 
 #define BOARD_LED1_BIT    (1 << BOARD_LED1)
 #define BOARD_LED2_BIT    (1 << BOARD_LED2)
 #define BOARD_LED3_BIT    (1 << BOARD_LED3)
+#define BOARD_LED4_BIT    (1 << BOARD_LED4)
+#define BOARD_LED5_BIT    (1 << BOARD_LED5)
+#define BOARD_LED6_BIT    (1 << BOARD_LED6)
 
 /* If CONFIG_ARCH_LEDS is defined, the usage by the board port is defined in
  * include/board.h and src/stm32_leds.c.
@@ -346,8 +350,15 @@
 #define GPIO_UART8_RX GPIO_UART8_RX_1
 #define GPIO_UART8_TX GPIO_UART8_TX_1
 
-// #define DMAMAP_USART8_RX DMAMAP_DMA12_USART8RX_0
-// #define DMAMAP_USART8_TX DMAMAP_DMA12_USART8TX_1
+/* I2C1 pins */
+
+#define GPIO_I2C1_SCL     (GPIO_I2C1_SCL_2 | GPIO_SPEED_50MHz) /* PB8 - D5 */
+#define GPIO_I2C1_SDA     (GPIO_I2C1_SDA_1 | GPIO_SPEED_50MHz) /* PB7 - C5 */
+
+/* I2C2 pins */
+
+#define GPIO_I2C2_SCL     (GPIO_I2C2_SCL_2 | GPIO_SPEED_50MHz) /* PF1 - F5 */
+#define GPIO_I2C2_SDA     (GPIO_I2C2_SDA_2 | GPIO_SPEED_50MHz) /* PF0 - F4 */
 
 /****************************************************************************
  * Public Data

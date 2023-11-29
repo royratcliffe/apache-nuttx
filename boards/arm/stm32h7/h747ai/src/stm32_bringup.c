@@ -39,11 +39,26 @@
 #  include <nuttx/serial/uart_rpmsg.h>
 #endif
 
+#ifdef CONFIG_USERLED
+#  include <nuttx/leds/userled.h>
+#endif
+
 #include "h747ai.h"
 
+#if defined(CONFIG_I2C)
+#include "stm32_i2c.h"
+struct i2c_master_s *i2c1_m;
+struct i2c_master_s *i2c2_m;
+#endif /* CONFIG_I2C */
+
 /****************************************************************************
- * Private Functions
+ * Pre-processor Definitions
  ****************************************************************************/
+
+#define DEVNO_ZERO   0
+#define DEVNO_ONE    1
+#define DEVNO_TWO    2
+#define DEVNO_THREE  3
 
 /****************************************************************************
  * Public Functions
@@ -109,6 +124,61 @@ int stm32_bringup(void)
   stm32_rptun_init("cm4-shmem", "cm4");
 #  endif
 #endif
+
+#ifdef CONFIG_DEV_GPIO
+  /* Register the GPIO driver */
+
+  ret = stm32_gpio_initialize();
+  if (ret < 0)
+    {
+      syslog(LOG_ERR, "Failed to initialize GPIO Driver: %d\n", ret);
+      return ret;
+    }
+#endif
+
+#if !defined(CONFIG_ARCH_LEDS) && defined(CONFIG_USERLED_LOWER)
+  /* Register the LED driver */
+
+  ret = userled_lower_initialize(LED_DRIVER_PATH);
+  if (ret < 0)
+    {
+      syslog(LOG_ERR, "ERROR: userled_lower_initialize() failed: %d\n", ret);
+    }
+#endif
+
+#if defined(CONFIG_I2C)
+  i2c1_m = stm32_i2cbus_initialize(1);
+  if (i2c1_m == NULL)
+    {
+      syslog(LOG_ERR, "ERROR: Failed to init i2c controller\n");
+    }
+  else
+    {
+      ret = i2c_register(i2c1_m, DEVNO_ZERO);
+      if (ret < 0)
+        {
+          syslog(LOG_ERR, "ERROR: Failed to register I2C%d driver: %d\n", 
+                DEVNO_ZERO, ret);
+          stm32_i2cbus_uninitialize(i2c1_m);
+        }
+    }
+  
+  i2c2_m = stm32_i2cbus_initialize(2);
+  if (i2c2_m == NULL)
+    {
+      syslog(LOG_ERR, "ERROR: Failed to init i2c controller\n");
+    }
+  else
+    {
+      ret = i2c_register(i2c2_m, DEVNO_ONE);
+      if (ret < 0)
+        {
+          syslog(LOG_ERR, "ERROR: Failed to register I2C%d driver: %d\n", 
+                DEVNO_ONE, ret);
+          stm32_i2cbus_uninitialize(i2c2_m);
+        }
+    }
+#endif /* CONFIG_I2C */
 
   return OK;
 }
