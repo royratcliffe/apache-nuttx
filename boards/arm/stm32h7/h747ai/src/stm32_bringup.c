@@ -318,6 +318,5 @@ void board_early_initialize(void)
   int ret = OK;
 
   UNUSED(ret);
-
 }
 #endif
