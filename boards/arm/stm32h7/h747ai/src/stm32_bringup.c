@@ -127,7 +127,6 @@ int stm32_bringup(void)
 #ifdef CONFIG_STM32H7_I2C4
   struct i2c_master_s *i2c4;
 #endif
-
 #ifdef CONFIG_STM32H7_SPI1
   struct spi_dev_s *spi1;
 #endif
@@ -278,7 +277,7 @@ int stm32_bringup(void)
 #ifdef CONFIG_SPI_DRIVER
       /* Register the SPI1 character driver */
 
-      ret = spi_register(spi1, 1);
+      ret = spi_register(spi1, DEVNO_ZERO);
       if (ret < 0)
         {
           spierr("ERROR: Failed to register SPI1 device: %d\n", ret);
