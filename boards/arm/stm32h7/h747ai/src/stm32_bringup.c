@@ -67,6 +67,8 @@
 #define DEVNO_ONE    1
 #define DEVNO_TWO    2
 #define DEVNO_THREE  3
+#define DEVNO_FOUR   4
+#define DEVNO_FIVE   5
 
 /****************************************************************************
  * Public Data
@@ -281,6 +283,58 @@ int stm32_bringup(void)
       if (ret < 0)
         {
           spierr("ERROR: Failed to register SPI1 device: %d\n", ret);
+        }
+#endif
+    }
+#endif
+
+#ifdef CONFIG_STM32H7_SPI3
+  /* Set up SPI3 NSS */
+
+  stm32_configgpio(GPIO_SPI3_NSS);
+
+  /* Initialize the SPI3 bus */
+
+  spi3 = stm32_spibus_initialize(3);
+  if (spi3 == NULL)
+    {
+      spierr("ERROR: Initialize SPI3: \n");
+    }
+  else
+    {
+#ifdef CONFIG_SPI_DRIVER
+      /* Register the SPI3 character driver */
+
+      ret = spi_register(spi3, DEVNO_TWO);
+      if (ret < 0)
+        {
+          spierr("ERROR: Failed to register SPI3 device: %d\n", ret);
+        }
+#endif
+    }
+#endif
+
+#ifdef CONFIG_STM32H7_SPI5
+  /* Set up SPI5 NSS */
+
+  stm32_configgpio(GPIO_SPI5_NSS);
+
+  /* Initialize the SPI5 bus */
+
+  spi5 = stm32_spibus_initialize(5);
+  if (spi5 == NULL)
+    {
+      spierr("ERROR: Initialize SPI5: \n");
+    }
+  else
+    {
+#ifdef CONFIG_SPI_DRIVER
+      /* Register the SPI5 character driver */
+
+      ret = spi_register(spi5, DEVNO_FOUR);
+      if (ret < 0)
+        {
+          spierr("ERROR: Failed to register SPI5 device: %d\n", ret);
         }
 #endif
     }

@@ -106,6 +106,8 @@ void stm32_spi3select(struct spi_dev_s *dev, uint32_t devid,
 {
   spiinfo("devid: %d CS: %s\n",
          (int)devid, selected ? "assert" : "de-assert");
+
+  stm32_gpiowrite(GPIO_SPI3_NSS, !selected);
 }
 
 uint8_t stm32_spi3status(struct spi_dev_s *dev, uint32_t devid)
@@ -134,6 +136,8 @@ void stm32_spi5select(struct spi_dev_s *dev, uint32_t devid,
 {
   spiinfo("devid: %d CS: %s\n",
          (int)devid, selected ? "assert" : "de-assert");
+
+  stm32_gpiowrite(GPIO_SPI5_NSS, !selected);
 }
 
 uint8_t stm32_spi5status(struct spi_dev_s *dev, uint32_t devid)

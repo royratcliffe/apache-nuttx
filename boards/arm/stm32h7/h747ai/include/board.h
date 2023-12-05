@@ -281,11 +281,30 @@
 
 /* SPI1 pins */
 
-#define GPIO_SPI1_NSS     (GPIO_OUTPUT | GPIO_PUSHPULL | GPIO_OUTPUT_SET| \
+#define GPIO_SPI1_NSS     (GPIO_OUTPUT | GPIO_PUSHPULL | \
+                           GPIO_OUTPUT_SET | \
                            GPIO_PORTG | GPIO_PIN10)           /* PG10 - D7 */
 #define GPIO_SPI1_SCK     (GPIO_SPI1_SCK_3)                   /* PG11 - E7 */
 #define GPIO_SPI1_MISO    (GPIO_SPI1_MISO_3)                  /* PG9 - C7 */
 #define GPIO_SPI1_MOSI    (GPIO_SPI1_MOSI_3)                  /* PD7 - A8 */
+
+/* SPI3 pins */
+
+#define GPIO_SPI3_NSS     (GPIO_OUTPUT | GPIO_PUSHPULL | \
+                           GPIO_OUTPUT_SET | \
+                           GPIO_PORTA | GPIO_PIN15)           /* PA15 - B10 */
+#define GPIO_SPI3_SCK     (GPIO_SPI3_SCK_1)                   /* PB3 - A6 */
+#define GPIO_SPI3_MISO    (GPIO_SPI3_MISO_1)                  /* PB4 - B6 */
+#define GPIO_SPI3_MOSI    (GPIO_SPI3_MOSI_1)                  /* PD6 - B8 */
+
+/* SPI5 pins */
+
+#define GPIO_SPI5_NSS     (GPIO_OUTPUT | GPIO_PUSHPULL | \
+                           GPIO_OUTPUT_SET | \
+                           GPIO_PORTF | GPIO_PIN6)            /* PF6 - G4 */
+#define GPIO_SPI5_SCK     (GPIO_SPI5_SCK_1)                   /* PF7 - G5 */
+#define GPIO_SPI5_MISO    (GPIO_SPI5_MISO_1)                  /* PF8 - G6 */
+#define GPIO_SPI5_MOSI    (GPIO_SPI5_MOSI_1)                  /* PF11 - K6 */
 
 /****************************************************************************
  * Public Data
