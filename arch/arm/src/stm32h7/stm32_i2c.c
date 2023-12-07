@@ -1227,11 +1227,11 @@ static void stm32_i2c_setclock(struct stm32_i2c_priv_s *priv,
 
       if (frequency == 100000)
         {
-          presc        = 0;
-          scl_delay    = 5;
-          sda_delay    = 0;
-          scl_h_period = 61;
-          scl_l_period = 89;
+          presc        = 0x00;
+          scl_delay    = 0xc;
+          sda_delay    = 0x0;
+          scl_h_period = 0xea;
+          scl_l_period = 0xff;
         }
       else if (frequency == 400000)
         {
